@@ -26,7 +26,7 @@ class Cita:
 class Agenda:
     """Gestiona las citas del consultorio."""
     def __init__(self):
-        self.citas = []  # Lista de objetos Cita
+        self.citas = [Cita]  # Lista de objetos Cita
     def agendar_cita(self, paciente: str, fecha: str, hora: str):
         """Crea una nueva cita y la agrega a la lista de citas."""
         nueva_cita = Cita(paciente, fecha, hora)

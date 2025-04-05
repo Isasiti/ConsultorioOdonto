@@ -1,7 +1,7 @@
 "Parte solo para comprobar el usuario"
 class Usuario:
     _USUARIO_ESPERADO = "lacabramosquera"
-    _CONTRASEÑA_ESPERADA = "NOPUEDOMASSSSSSSS"
+    _CONTRASEÑA_ESPERADA = "NOPUEDOMAS"
     def __init__(self, usuario: str, contraseña: str):
         self.usuario = usuario
         self.contraseña = contraseña
