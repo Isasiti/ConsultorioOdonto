@@ -1,28 +1,34 @@
-from datetime import datetime
 class HistoriaClinica:
-    """Representa una entrada en la historia clínica de un paciente."""
-    def __init__(self, nombre_paciente: str, tratamiento: str, costo: float, fecha: str):
-        self.nombre_paciente = nombre_paciente
+    def __init__(self, nombre: str, tratamiento: str, costo: float, fecha: str):
+        self.nombre = nombre
         self.tratamiento = tratamiento
         self.costo = costo
-        self.fecha = fecha  # Fecha en formato string, puede validarse con datetime si se desea
+        self.fecha = fecha
 
     def __str__(self):
-        return f"Paciente: {self.nombre_paciente} | Tratamiento: {self.tratamiento} | Costo: ${self.costo:.2f} | Fecha: {self.fecha}"
+        return f"Paciente: {self.nombre}, Fecha: {self.fecha}, Tratamiento: {self.tratamiento}, Costo: ${self.costo:.2f}"
 class Paciente:
-    """Representa a un paciente con su historial clínico."""
     def __init__(self, nombre: str):
         self.nombre = nombre
-        self.historial = []  # Lista de objetos HistoriaClinica
+        self.historial = []
+
     def agregar_historia_clinica(self, tratamiento: str, costo: float, fecha: str):
-        """Agrega una nueva entrada al historial clínico del paciente."""
-        nueva_historia = HistoriaClinica(self.nombre, tratamiento, costo, fecha)
-        self.historial.append(nueva_historia)
-    def obtener_historial(self):
-        """Devuelve el historial clínico completo del paciente."""
-        return self.historial
+        historia = HistoriaClinica(self.nombre, tratamiento, costo, fecha)
+        self.historial.append(historia)
+
+    def editar_historia(self, fecha: str, nuevo_tratamiento: str, nuevo_costo: float):
+        for historia in self.historial:
+            if historia.fecha == fecha:
+                historia.tratamiento = nuevo_tratamiento
+                historia.costo = nuevo_costo
+                print("Historia clínica actualizada.")
+                return
+        print("No se encontró una historia clínica con esa fecha.")
+
     def __str__(self):
         if not self.historial:
-            return f"{self.nombre} no tiene historial clínico."
-        historial_str = "\n".join(str(historia) for historia in self.historial)
-        return f"Historial clínico de {self.nombre}:\n{historial_str}"
+            return f"Paciente: {self.nombre} - No tiene historias clínicas registradas."
+        historial_str = f"\nHistorial clínico del paciente {self.nombre}:\n"
+        for historia in self.historial:
+            historial_str += str(historia) + "\n"
+        return historial_str

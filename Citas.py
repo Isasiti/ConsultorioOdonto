@@ -1,48 +1,56 @@
+from Paciente import Paciente
 class Cita:
-    """Representa una cita agendada para un paciente."""
-    contador_citas = 1  # Contador para generar números clave únicos
-    def __init__(self, paciente: str, fecha: str, hora: str):
+    contador_clave = 1
+
+    def __init__(self, paciente, fecha, hora):
         self.paciente = paciente
         self.fecha = fecha
         self.hora = hora
-        self.numero_clave = f"{Cita.contador_citas:03d}"  # Genera clave con formato 001, 002, etc.
         self.realizada = False
-        Cita.contador_citas += 1  # Incrementa el contador para la próxima cita
-    def modificar_cita(self, nueva_fecha: str, nueva_hora: str):
-        """Modifica la fecha y hora de la cita."""
+        self.numero_clave = f"{Cita.contador_clave:03d}"
+        Cita.contador_clave += 1
+
+    def modificar_cita(self, nueva_fecha, nueva_hora):
         self.fecha = nueva_fecha
         self.hora = nueva_hora
+
     def cancelar_cita(self):
-        """Cancela la cita marcándola como None."""
-        self.paciente = None
         self.fecha = None
         self.hora = None
-        self.numero_clave = None
-    def marcar_como_realizada(self):
-        """Marca la cita como realizada."""
+        self.paciente = None
+
+    def marcar_como_realizada(self, tratamiento, costo, pacientes_registrados):
         self.realizada = True
+        if self.paciente not in pacientes_registrados:
+            pacientes_registrados[self.paciente] = Paciente(self.paciente)
+        pacientes_registrados[self.paciente].agregar_historia_clinica(tratamiento, costo, self.fecha)
+
     def __str__(self):
-        return f"Cita {self.numero_clave}: {self.paciente} - {self.fecha} a las {self.hora}"
+        estado = "Realizada" if self.realizada else "Pendiente"
+        return f"Cita {self.numero_clave}: {self.paciente} - {self.fecha} a las {self.hora} ({estado})"
 class Agenda:
-    """Gestiona las citas del consultorio."""
     def __init__(self):
-        self.citas = [Cita]  # Lista de objetos Cita
-    def agendar_cita(self, paciente: str, fecha: str, hora: str):
-        """Crea una nueva cita y la agrega a la lista de citas."""
+        self.citas = []
+    def agendar_cita(self, paciente, fecha, hora):
         nueva_cita = Cita(paciente, fecha, hora)
         self.citas.append(nueva_cita)
-        return nueva_cita.numero_clave
+        print(f"Cita agendada con éxito. Código de cita: {nueva_cita.numero_clave}\n")
     def listar_citas_pendientes(self):
-        """Devuelve una lista con las citas pendientes."""
-        return [cita for cita in self.citas if not cita.realizada]
-    def buscar_cita(self, paciente: str):
-        """Busca una cita por el nombre del paciente y devuelve su número clave."""
+        print("\nCitas pendientes:")
+        for cita in self.citas:
+            if not cita.realizada:
+                print(cita)
+    def buscar_cita(self, paciente):
         for cita in self.citas:
             if cita.paciente == paciente:
                 return cita.numero_clave
-        return None  # Devuelve None si no se encuentra la cita
-    def __str__(self):
-        """Devuelve una representación en texto de todas las citas agendadas."""
-        if not self.citas:
-            return "No hay citas agendadas."
-        return "\n".join(str(cita) for cita in self.citas)
+        print("No se encontró una cita para ese paciente.")
+        return None
+    def cancelar_cita(self, clave):
+        for cita in self.citas:
+            if cita.numero_clave == clave:
+                cita.cancelar_cita()
+                print("Cita cancelada exitosamente.\n")
+                return
+        print("No se encontró una cita con ese código.\n")
+
