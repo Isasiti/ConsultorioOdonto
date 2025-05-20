@@ -1,22 +1,19 @@
 from Citas import Agenda
 from Paciente import Paciente
 from Usuario import Usuario
-
 # Diccionario de pacientes registrados
 pacientes_registrados = {}
-
 # Instancia de Agenda
 agenda = Agenda()
-
 # Usuario esperado
 usuario_app = Usuario()
 
 def login():
     print("\nBienvenido al sistema del consultorio odontológico")
     while True:
-        user = input("Ingrese su nombre de usuario: ")
-        password = input("Ingrese su contraseña: ")
-        if usuario_app.verificar_credenciales(user, password):
+        usuario = input("Ingrese su nombre de usuario: ")
+        contraseña = input("Ingrese su contraseña: ")
+        if usuario_app.verificar_credenciales(usuario,contraseña):
             print("\nInicio de sesión exitoso.\n")
             break
         else:
@@ -24,7 +21,6 @@ def login():
 
 def mostrar_menu():
     print("--- Menú principal ---")
-    print("1. Mostrar las citas a realizar")
     print("2. Agendar una nueva cita")
     print("3. Mostrar citas a realizar (con código)")
     print("4. Marcar cita como realizada")
@@ -40,13 +36,7 @@ def main():
     while True:
         mostrar_menu()
         opcion = input("Seleccione una opción: ")
-
-        if opcion == "1":
-            for cita in agenda.citas:
-                if not cita.realizada:
-                    print(cita)
-
-        elif opcion == "2":
+        if opcion == "2":
             paciente = input("Nombre del paciente: ")
             fecha = input("Fecha (YYYY-MM-DD): ")
             hora = input("Hora (HH:MM AM/PM): ")
@@ -66,11 +56,9 @@ def main():
                     break
             else:
                 print("No se encontró una cita pendiente con ese código.\n")
-
         elif opcion == "5":
             for paciente in pacientes_registrados.values():
                 print(paciente)
-
         elif opcion == "6":
             nombre = input("Nombre del paciente: ")
             fecha = input("Fecha de la historia a editar (YYYY-MM-DD): ")
@@ -80,7 +68,6 @@ def main():
                 pacientes_registrados[nombre].editar_historia(fecha, nuevo_tratamiento, nuevo_costo)
             else:
                 print("Paciente no encontrado.\n")
-
         elif opcion == "7":
             nombre = input("Nombre del paciente: ")
             if nombre in pacientes_registrados:
